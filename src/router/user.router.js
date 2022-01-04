@@ -1,11 +1,11 @@
-const controller=require('../controller/user.controller')
+yonghudenoller=require('../controller/user.controller')
 
-const {verifyUser} = require("../middleware/user.middleware");
+const {verifyUser,handlePassword} = require("../middleware/user.middleware");
 
 const Router=require('koa-router')
 
 const userRouter=new Router({prefix:'/users'})
 
-userRouter.post('/',verifyUser,controller.create)
+userRouter.post('/',verifyUser,handlePassword,controller.create)
 
 module.exports = userRouter
