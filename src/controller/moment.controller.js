@@ -12,6 +12,14 @@ class MomentController{
         ctx.body=result
         await next()
     }
+    async detail(ctx,next){
+        // 获取数据(momentId)
+        const momentId=ctx.params.momentId
+        // 查询数据
+        const result=await service.getMomentById(momentId)
+        ctx.body=result
+        await next()
+    }
 }
 
 module.exports = new MomentController()
