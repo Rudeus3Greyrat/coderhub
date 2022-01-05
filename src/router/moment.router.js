@@ -7,5 +7,6 @@ const momentRouter=new Router({prefix:'/moment'})
 
 momentRouter.post('/',verifyAuth,controller.create)
 momentRouter.get('/:momentId',controller.detail)
+momentRouter.get('/',controller.list)
 
 module.exports = momentRouter

@@ -20,6 +20,13 @@ class MomentController{
         ctx.body=result
         await next()
     }
+    async list(ctx,next){
+        // 获取数据(offset,size)
+        const {offset,size}=ctx.query
+        const result=await service.getMomentList(offset,size)
+        ctx.body=result
+        await next()
+    }
 }
 
 module.exports = new MomentController()
