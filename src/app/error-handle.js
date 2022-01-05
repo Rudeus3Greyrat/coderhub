@@ -21,7 +21,11 @@ const errorHandler=(error,ctx)=>{
             break
         case errorTypes.UNAUTHORIZED:
             status=401
-            message='认证失败'
+            message='token认证失败'
+            break
+        case errorTypes.UNPERMITTED:
+            status=401
+            message='不具备权限'
             break
         default:
             status=404

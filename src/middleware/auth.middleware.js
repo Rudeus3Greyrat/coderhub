@@ -1,5 +1,6 @@
 const errorTypes = require("../constants/error-types");
-const service = require("../service/user.service");
+const userService = require("../service/user.service");
+const authService=require("../service/auth.service")
 const {md5password} = require("../utils/password-handle");
 const jwt=require('jsonwebtoken')
 const {PUBLIC_KEY} = require("../app/config");
@@ -13,7 +14,7 @@ const verifyLogin=async (ctx,next)=>{
         return ctx.app.emit('error', error, ctx)
     }
     // 判断用户是否存在
-    const result=await service.getUserByName(name)
+    const result=await userService.getUserByName(name)
     const user=result[0]
     if(!user){
         const error = new Error(errorTypes.USER_DOES_NOT_EXIST)
@@ -51,7 +52,24 @@ const verifyAuth=async (ctx,next)=>{
     }
 }
 
+const verifyPermission=async (ctx,next)=>{
+    // 获取参数
+    const {momentId}=ctx.params
+    const {id}=ctx.user
+    // 查询是否具备权限
+    try{
+        const isPermitted=await authService.checkMoment(momentId,id)
+        if(!isPermitted) throw new Error()
+        await next()
+    }catch (e) {
+        const error=new Error(errorTypes.UNPERMITTED)
+        return ctx.app.emit('error',error,ctx)
+    }
+
+}
+
 module.exports = {
     verifyLogin,
-    verifyAuth
+    verifyAuth,
+    verifyPermission
 }

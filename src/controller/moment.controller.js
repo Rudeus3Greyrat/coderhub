@@ -23,9 +23,21 @@ class MomentController{
     async list(ctx,next){
         // 获取数据(offset,size)
         const {offset,size}=ctx.query
+        // 修改内容
         const result=await service.getMomentList(offset,size)
         ctx.body=result
         await next()
+    }
+    async update(ctx,next){
+        const {momentId}=ctx.params
+        const {content}=ctx.request.body
+        const result=await service.update(momentId,content)
+        ctx.body=result
+    }
+    async remove(ctx,next){
+        const {momentId}=ctx.params
+        const result=await service.remove(momentId)
+        ctx.body=result
     }
 }
 
