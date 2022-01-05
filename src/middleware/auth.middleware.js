@@ -34,6 +34,10 @@ const verifyAuth=async (ctx,next)=>{
     console.log('验证授权的middleware')
     // 获取token
     const authorization=ctx.headers.authorization
+    if(!authorization){
+        const error=new Error(errorTypes.UNAUTHORIZED)
+        return ctx.app.emit('error',error,ctx)
+    }
     const token=authorization.replace('Bearer ','')
     // 验证token(id/name/iat/exp)
     try{
