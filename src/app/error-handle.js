@@ -1,7 +1,7 @@
 const errorTypes = require("../constants/error-types");
 const errorHandler=(error,ctx)=>{
-    let status=404
-    let message=''
+    let status
+    let message
     switch (error.message) {
         case errorTypes.NAME_OR_PASSWORD_IS_REQUIRED:
             status=400
@@ -18,6 +18,10 @@ const errorHandler=(error,ctx)=>{
         case errorTypes.PASSWORD_INCORRECT:
             status=400
             message='密码错误'
+            break
+        case errorTypes.UNAUTHORIZED:
+            status=401
+            message='认证失败'
             break
         default:
             status=404

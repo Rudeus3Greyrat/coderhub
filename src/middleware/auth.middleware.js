@@ -1,6 +1,9 @@
 const errorTypes = require("../constants/error-types");
 const service = require("../service/user.service");
 const {md5password} = require("../utils/password-handle");
+const jwt=require('jsonwebtoken')
+const {PUBLIC_KEY} = require("../app/config");
+
 const verifyLogin=async (ctx,next)=>{
     // 获取用户名和密码
     const {name,password}=ctx.request.body
@@ -22,9 +25,29 @@ const verifyLogin=async (ctx,next)=>{
         return ctx.app.emit('error', error, ctx)
     }
 
+    ctx.user=user
+
     await next()
 }
 
+const verifyAuth=async (ctx,next)=>{
+    console.log('验证授权的middleware')
+    // 获取token
+    const authorization=ctx.headers.authorization
+    const token=authorization.replace('Bearer ','')
+    // 验证token(id/name/iat/exp)
+    try{
+        ctx.user=jwt.verify(token,PUBLIC_KEY,{
+            algorithms:['RS256']
+        })
+        await next()
+    }catch (e) {
+        const error=new Error(errorTypes.UNAUTHORIZED)
+        return ctx.app.emit('error',error,ctx)
+    }
+}
+
 module.exports = {
-    verifyLogin
+    verifyLogin,
+    verifyAuth
 }
