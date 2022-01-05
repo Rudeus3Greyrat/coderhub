@@ -1,4 +1,4 @@
-yonghudenoller=require('../controller/user.controller')
+const controller=require('../controller/user.controller')
 
 const {verifyUser,handlePassword} = require("../middleware/user.middleware");
 
