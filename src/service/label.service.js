@@ -6,6 +6,11 @@ class LabelService{
         const [result]=await connection.execute(statement,[name])
         return result
     }
+    async list(offset,size){
+        const statement=`SELECT * FROM label LIMIT ?,?;`
+        const [result]=await connection.execute(statement,[offset,size])
+        return result
+    }
     async queryLabel(name){
         const statement=`SELECT * FROM label WHERE name = ?;`
         const [result]=await connection.execute(statement,[name])

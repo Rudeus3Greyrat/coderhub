@@ -40,8 +40,15 @@ class MomentController{
         ctx.body=result
     }
     async addLabels(ctx,next){
-        const {labels}=ctx.request.body
-        ctx.body=labels
+        const {labels}=ctx
+        const {id:momentId}=ctx.params
+        for(const label of labels){
+            const isExist=await service.hasLabel(momentId,label.id)
+            if(!isExist){
+                await service.addLabel(momentId,label.id)
+            }
+        }
+        ctx.body=`给动态添加标签成功~`
     }
 }
 
