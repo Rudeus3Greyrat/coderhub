@@ -42,7 +42,7 @@ const verifyAuth=async (ctx,next)=>{
     const token=authorization.replace('Bearer ','')
     // 验证token(id/name/iat/exp)
     try{
-        ctx.user=jwt.verify(token,PUBLIC_KEY,{
+        ctx.user=await jwt.verify(token,PUBLIC_KEY,{
             algorithms:['RS256']
         })
         await next()
@@ -52,24 +52,25 @@ const verifyAuth=async (ctx,next)=>{
     }
 }
 
-const verifyPermission=async (ctx,next)=>{
-    // 获取参数
-    const {momentId}=ctx.params
-    const {id}=ctx.user
-    // 查询是否具备权限
-    try{
-        const isPermitted=await authService.checkMoment(momentId,id)
-        if(!isPermitted) throw new Error()
-        await next()
-    }catch (e) {
-        const error=new Error(errorTypes.UNPERMITTED)
-        return ctx.app.emit('error',error,ctx)
+const verifyPermission=(tableName)=>{
+    return async (ctx,next)=>{
+        // 获取参数
+        const {id}=ctx.params
+        const {id:userId}=ctx.user
+        // 查询是否具备权限
+        try{
+            const isPermitted=await authService.checkPermission(id,userId,tableName)
+            if(!isPermitted) throw new Error()
+            await next()
+        }catch (e) {
+            const error=new Error(errorTypes.UNPERMITTED)
+            return ctx.app.emit('error',error,ctx)
+        }
     }
-
 }
 
 module.exports = {
     verifyLogin,
     verifyAuth,
-    verifyPermission
+    verifyPermission,
 }

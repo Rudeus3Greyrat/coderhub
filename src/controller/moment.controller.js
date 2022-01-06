@@ -14,9 +14,9 @@ class MomentController{
     }
     async detail(ctx,next){
         // 获取数据(momentId)
-        const momentId=ctx.params.momentId
+        const {id}=ctx.params
         // 查询数据
-        const result=await service.getMomentById(momentId)
+        const result=await service.getMomentById(id)
         ctx.body=result
         await next()
     }
@@ -29,14 +29,14 @@ class MomentController{
         await next()
     }
     async update(ctx,next){
-        const {momentId}=ctx.params
+        const {id}=ctx.params
         const {content}=ctx.request.body
-        const result=await service.update(momentId,content)
+        const result=await service.update(id,content)
         ctx.body=result
     }
     async remove(ctx,next){
-        const {momentId}=ctx.params
-        const result=await service.remove(momentId)
+        const {id}=ctx.params
+        const result=await service.remove(id)
         ctx.body=result
     }
 }
