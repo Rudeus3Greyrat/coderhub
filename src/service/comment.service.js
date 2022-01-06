@@ -4,7 +4,7 @@ class CommentService {
     async list(momentId) {
         const statement = `SELECT
                                c.id id, c.content content, c.comment_id commentId, c.createAt createTime, c.updateAt updateTime,
-                               JSON_OBJECT('id',u.id,'name',u.name) user
+                               JSON_OBJECT('id',u.id,'name',u.name,'avatar',u.avatar_url) user
                            FROM comment c
                                     LEFT JOIN user u on c.user_id = u.id
                            WHERE moment_id = ?;`

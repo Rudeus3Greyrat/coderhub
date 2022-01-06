@@ -7,5 +7,6 @@ const Router=require('koa-router')
 const userRouter=new Router({prefix:'/users'})
 
 userRouter.post('/',verifyUser,handlePassword,controller.create)
+userRouter.get('/:id/avatar',controller.avatarInfo)
 
 module.exports = userRouter
