@@ -1,6 +1,14 @@
 const service=require('../service/comment.service')
 
 class CommentController{
+    async list(ctx,next){
+        // 获取数据(momentId)
+        const {momentId}=ctx.query
+        // 查询数据库
+        const result=await service.list(momentId)
+        ctx.body=result
+        await next()
+    }
     async create(ctx,next){
         // 获取数据(user_id,content)
         const userId=ctx.user.id

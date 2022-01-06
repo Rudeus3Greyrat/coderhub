@@ -5,6 +5,7 @@ const {verifyAuth,verifyPermission} = require("../middleware/auth.middleware");
 
 const commentRouter=new Router({prefix:'/comment'})
 
+commentRouter.get('/',controller.list)
 commentRouter.post('/',verifyAuth,controller.create)
 commentRouter.post('/reply/:id',verifyAuth,controller.reply)
 commentRouter.patch('/:id',verifyAuth,verifyPermission('comment'),controller.update)

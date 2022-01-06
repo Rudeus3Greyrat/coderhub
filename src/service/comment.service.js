@@ -1,6 +1,16 @@
 const connection = require('../app/database')
 
 class CommentService {
+    async list(momentId) {
+        const statement = `SELECT
+                               c.id id, c.content content, c.comment_id commentId, c.createAt createTime, c.updateAt updateTime,
+                               JSON_OBJECT('id',u.id,'name',u.name) user
+                           FROM comment c
+                                    LEFT JOIN user u on c.user_id = u.id
+                           WHERE moment_id = ?;`
+        const [result] = await connection.execute(statement, [momentId])
+        return result
+    }
     async create(userId, content,momentId) {
         const statement = `INSERT INTO comment (content, user_id,moment_id) values (?, ?, ?);`
         const [result] = await connection.execute(statement, [content, userId,momentId])
