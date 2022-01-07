@@ -33,7 +33,8 @@ class MomentService {
                                    FROM comment c
                                             LEFT JOIN user cu on cu.id = c.user_id
                                    WHERE m.id = c.moment_id)                                                    comments,
-                                  IF(COUNT(l.id), JSON_ARRAYAGG(JSON_OBJECT('id', l.id, 'name', l.name)), NULL) labels
+                                  IF(COUNT(l.id), JSON_ARRAYAGG(JSON_OBJECT('id', l.id, 'name', l.name)), NULL) labels,
+                                  (SELECT JSON_ARRAYAGG(CONCAT('http://localhost:8081/moment/images/',file.filename)) FROM file WHERE file.moment_id = m.id) images
                            FROM moment m
                                     LEFT JOIN user u
                                               on u.id = m.user_id
@@ -60,7 +61,8 @@ class MomentService {
                    m.updateAt                                                       updateTime,
                    JSON_OBJECT('id', u.id, 'name', u.name)                          author,
                    (SELECT COUNT(*) FROM comment c WHERE c.moment_id = m.id)        commentCount,
-                   (SELECT COUNT(*) FROM moment_label ml WHERE m.id = ml.moment_id) labelCount
+                   (SELECT COUNT(*) FROM moment_label ml WHERE m.id = ml.moment_id) labelCount,
+                   (SELECT JSON_ARRAYAGG(CONCAT('http://localhost:8081/moment/images/',file.filename)) FROM file WHERE file.moment_id = m.id) images
             FROM moment m
                      LEFT JOIN user u
                                on u.id = m.user_id LIMIT ?,?;`

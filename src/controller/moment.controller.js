@@ -1,4 +1,9 @@
 const service=require('../service/moment.service')
+const fileService=require("../service/file.service")
+const fs = require("fs");
+const {PICTURE_PATH} = require("../app/config");
+
+const SIZES=['small','medium','large']
 
 class MomentController{
     async create(ctx,next){
@@ -49,6 +54,15 @@ class MomentController{
             }
         }
         ctx.body=`给动态添加标签成功~`
+    }
+    async getFileByName(ctx,next){
+        let {filename}=ctx.params
+        const {size}=ctx.query
+        const result=await fileService.getFileByName(filename)
+        const {mimetype}=result
+        if(SIZES.some(val=>val===size)) filename+=`-${size}`
+        ctx.response.set('content-type',mimetype)
+        ctx.body=fs.createReadStream(`${PICTURE_PATH}/${filename}`)
     }
 }
 

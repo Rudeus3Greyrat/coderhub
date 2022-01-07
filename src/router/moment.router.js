@@ -12,5 +12,6 @@ momentRouter.get('/',controller.list)
 momentRouter.patch('/:id',verifyAuth,verifyPermission('moment'),controller.update)
 momentRouter.delete('/:id',verifyAuth,verifyPermission('moment'),controller.remove)
 momentRouter.post('/:id/labels',verifyAuth,verifyPermission('moment'),verifyLabelExits,controller.addLabels)
+momentRouter.get('/images/:filename',verifyAuth,controller.getFileByName)
 
 module.exports = momentRouter

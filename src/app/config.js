@@ -14,6 +14,7 @@ module.exports = {
     MYSQL_USER,
     MYSQL_PASSWORD,
     AVATAR_PATH,
+    PICTURE_PATH,
     APP_HOST
 }=process.env
 
